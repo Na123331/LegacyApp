@@ -1,0 +1,280 @@
+﻿@model Dictionary<string, Dictionary<string, string>>
+
+<h1 class="mt-4">
+    Servers - Configuration Settings
+
+    @*     <span class="align-content-end">
+    <!-- Button to add new server -->
+    <button type="button" class="btn btn-success add-server-button" data-toggle="modal" data-target="#add-server-dialog">
+    Add New Server
+    </button>
+    </span> *@
+</h1>
+
+
+
+
+@foreach (var serverConfig in Model)
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="mb-0">@serverConfig.Key</h3>
+            <!-- Add button -->
+            <button type="button" class="btn btn-success add-button" data-server="@serverConfig.Key">
+                <i class="fas fa-plus"></i> Add New Setting
+            </button>
+
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                @foreach (var setting in serverConfig.Value)
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>@setting.Key:</span> <span>@setting.Value</span>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-primary edit-button" data-server="@serverConfig.Key" data-key="@setting.Key" data-value="@setting.Value">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button type="button" class="btn btn-danger delete-button" data-server="@serverConfig.Key" data-key="@setting.Key">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<!-- Add server dialog -->
+<div id="add-server-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-server-dialog-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-server-dialog-label">Add New Server</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="server-name">Server Name:</label>
+                    <input type="text" class="form-control" id="server-name" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal-btn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="add-server-save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add dialog -->
+<div id="add-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-dialog-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-dialog-label">Add New Setting</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="add-serverName">
+                <div class="form-group">
+                    <label for="add-key">Key:</label>
+                    <input type="text" class="form-control" id="add-key" required>
+                </div>
+                <div class="form-group">
+                    <label for="add-value">Value:</label>
+                    <input type="text" class="form-control" id="add-value" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal-btn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="add-save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit dialog -->
+<div id="edit-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-dialog-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="edit-dialog-label">Edit Setting</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-serverName">
+                <input type="hidden" id="edit-key">
+                <div class="form-group">
+                    <label for="edit-value">Value:</label>
+                    <input type="text" class="form-control" id="edit-value" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal-btn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="edit-save">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete dialog -->
+<div id="delete-dialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-dialog-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-dialog-label">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this setting?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal-btn" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="delete-confirm">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Include Bootstrap and Font Awesome libraries *@
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        $(function () {
+
+            $(".close-modal-btn").click(function () {
+                // Find the parent modal and close it
+                $(this).closest('.modal').modal('hide');
+            });
+
+            // Add server button click handler
+            $(".add-server-button").click(function () {
+                $("#server-name").val(""); // Clear the input field
+            });
+
+            // Save button click handler
+            $("#add-server-save").click(function () {
+                var serverName = $("#server-name").val();
+                // AJAX call to add new server
+                $.ajax({
+                    url: "/Config/AddServer",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        serverName: serverName
+                    }),
+                    success: function () {
+                        location.reload(); // Refresh the page after successful addition
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error adding server: " + xhr.responseText);
+                    }
+                });
+            });
+
+
+            // Add button click handler
+            $(".add-button").click(function () {
+                var serverName = $(this).data("server");
+                $("#add-serverName").val(serverName);
+                $("#add-key").val("");
+                $("#add-value").val("");
+                $("#add-dialog").modal("show");
+            });
+
+            // Save add button click handler
+            $("#add-save").click(function () {
+                var serverName = $("#add-serverName").val();
+                var key = $("#add-key").val();
+                var value = $("#add-value").val();
+                // AJAX call to add setting
+                $.ajax({
+                    url: "/Config/AddSetting",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        serverName: serverName,
+                        key: key,
+                        value: value
+                    }),
+                    success: function () {
+                        location.reload(); // Refresh the page after successful add
+                    }
+                });
+                $("#add-dialog").modal("hide");
+            });
+
+
+
+
+            // Edit button click handler
+            $(".edit-button").click(function () {
+                var serverName = $(this).data("server");
+                var key = $(this).data("key");
+                var value = $(this).data("value");
+                $("#edit-serverName").val(serverName);
+                $("#edit-key").val(key);
+                $("#edit-value").val(value);
+                $("#edit-dialog").modal("show");
+            });
+
+            // Save edit button click handler
+            $("#edit-save").click(function () {
+                var serverName = $("#edit-serverName").val();
+                var key = $("#edit-key").val();
+                var value = $("#edit-value").val();
+                // AJAX call to update setting
+                $.ajax({
+                    url: "/Config/UpdateSetting",
+                    method: "POST",
+                    contentType: "application/json", // Set content type to JSON
+                    data: JSON.stringify({ // Convert data to JSON format
+                        serverName: serverName,
+                        key: key,
+                        value: value
+                    }),
+                    success: function () {
+                        location.reload(); // Refresh the page after successful update
+                    }
+                });
+                $("#edit-dialog").modal("hide");
+            });
+
+            // Delete button click handler
+            $(".delete-button").click(function () {
+                var serverName = $(this).data("server");
+                var key = $(this).data("key");
+                $("#delete-confirm").click(function () {
+                    // AJAX call to delete setting
+                    $.ajax({
+                        url: "/Config/DeleteSetting",
+                        method: "POST",
+                        contentType: "application/json", // Set content type to JSON
+                        data: JSON.stringify({ // Convert data to JSON format
+                            serverName: serverName,
+                            key: key
+                        }),
+                        success: function () {
+                            location.reload(); // Refresh the page after successful delete
+                        }
+                    });
+                    $("#delete-dialog").modal("hide");
+                });
+                $("#delete-dialog").modal("show");
+            });
+        });
+    </script>
+}
