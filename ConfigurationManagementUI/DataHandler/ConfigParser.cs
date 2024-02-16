@@ -30,7 +30,7 @@ namespace ConfigurationManagementUI.DataHandler
                     config[currentServer][key] = value;
                 }
             }
-
+      //the above will basically iterate through the config file 
             return config;
         }
     }
