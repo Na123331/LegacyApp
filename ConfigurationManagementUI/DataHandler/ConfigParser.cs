@@ -6,6 +6,7 @@ namespace ConfigurationManagementUI.DataHandler
 {
     public class ConfigParser
     {
+        // dictionary use for key-value pairs
         public Dictionary<string, Dictionary<string, string>> ParseConfigFile(string filePath)
         {
             var config = new Dictionary<string, Dictionary<string, string>>();
