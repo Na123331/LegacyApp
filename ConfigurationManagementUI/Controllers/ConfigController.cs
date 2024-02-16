@@ -20,25 +20,25 @@ namespace ConfigurationManagementUI.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult AddServer([FromBody] ConfigServerViewModel server)
-        {
-            try
-            {
+        //[HttpPost]
+        //public IActionResult AddServer([FromBody] ConfigServerViewModel server)
+        //{
+           // try
+            //{
                 // Append the new server section to the config file
-                System.IO.File.AppendAllText(_configFilePath, $"{Environment.NewLine}SERVER_NAME={server.ServerName}");
-                System.IO.File.AppendAllText(_configFilePath, $"{Environment.NewLine};END {server.ServerName}{Environment.NewLine}");
+               // System.IO.File.AppendAllText(_configFilePath, $"{Environment.NewLine}SERVER_NAME={server.ServerName}");
+               // System.IO.File.AppendAllText(_configFilePath, $"{Environment.NewLine};END {server.ServerName}{Environment.NewLine}");
                 // Optionally, you can also add some default settings for the new server here if needed.
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
+               // return Ok();
+            //}
+            //catch (Exception ex)
+            //{
                 // Handle exception
-                return StatusCode(500, $"Error adding server: {ex.Message}");
-            }
-        }
-
+                //return StatusCode(500, $"Error adding server: {ex.Message}");
+           // }
+      //  }
+       
 
         [HttpPost]
         public IActionResult AddSetting([FromBody] ConfigViewModel model)
